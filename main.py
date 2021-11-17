@@ -1,3 +1,16 @@
+def botRespuestasPlanas():
+    salir_opcion = False
+    while not salir_opcion:
+        print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
+        pregunta = input("> ")
+        if pregunta in preguntas_respuestas:
+            print("> " + preguntas_respuestas[pregunta])
+        elif pregunta == "Salir":
+            salir_opcion = True
+        else:
+            print("No entiendo su pregunta")
+
+
 preguntas_respuestas = {"¿Que equipo de futbol juega hoy?": "Eso no se decirtelo",
                         "¿Cuando es la próxima carrera de formula 1? ": "Eso nose decirtelo",
                         "¿Que día es mañana?": "Miercoles",
@@ -18,17 +31,7 @@ while not salir:
     opcion = int(input("\t\t\tOpcion: "))
 
     if opcion == 1:
-        salir_opcion = False
-        while not salir_opcion:
-            print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
-            pregunta = input("> ")
-            if pregunta in preguntas_respuestas:
-                print("> " + preguntas_respuestas[pregunta])
-            elif pregunta == "Salir":
-                salir_opcion = True
-            else:
-                print("No entiendo su pregunta")
-
+        botRespuestasPlanas()
     elif opcion == 2:
         print("\t\t\t2) Bot simple (respuestas REGEX)")
     elif opcion == 3:
