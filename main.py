@@ -1,4 +1,9 @@
 import random
+import re
+from datetime import datetime,timedelta
+
+
+
 
 def botRespuestasPlanas():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
@@ -26,10 +31,15 @@ def botRespuestasRegex():
             botRespuestasRegex4()
         elif pregunta == "¿Dime un número aleatorio del 1 al 10?":
             botRespuestasRegex5()
+        elif pregunta == "¿Que día es mañana?":
+            botRespuestasRegex3()
+        elif pregunta == "Hola, soy Alex":
+            botRespuestasRegex6(pregunta)
         elif pregunta == "Salir":
             salir_opcion = True
         else:
-            print("No entiendo su pregunta")
+            botRespuestasRegex6(pregunta)
+            #print("No entiendo su pregunta")
 
 
 def botRespuestasRegex1():
@@ -50,6 +60,30 @@ def botRespuestasRegex4():
 def botRespuestasRegex5():
     random_index = random.randrange(1, 10)
     print(random_index)
+
+
+def botRespuestasRegex3():
+    dias = {'0': 'Domingo', '1': 'lunes', '2': 'Martes', '3': 'Miércoles','4': 'Jueves', '5': 'Viernes', '6': 'Sábado' }
+
+    hoy = datetime.today()  # Obtener la fecha de hoy
+    hoy = hoy + timedelta(days=1) # le sumamos un dia mas
+    dia = hoy.strftime('%w') #obtengo el numero de dia
+    print("Mañaná será " + dias[dia])
+
+
+
+
+def botRespuestasRegex6(pregunta):
+    palabra1 = 'hola'
+
+    encontrado = re.search(palabra1,  pregunta)
+
+    if encontrado:
+       nombre = pregunta.split()
+       print("Muy buenas," + nombre[-1] + " Soy Botarate:")
+    else:
+       print("No se ha encontrado la palabra:", palabra1)
+
 
 
 preguntas_respuestas = {"¿Que equipo de futbol juega hoy?": "Eso no se decirtelo",
@@ -82,3 +116,9 @@ while not salir:
     elif opcion == 5:
         print("\t\t\t5) Salir\n")
         salir = True
+
+
+
+
+
+
