@@ -1,6 +1,6 @@
 import random
 import re
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 
 
 
@@ -18,6 +18,9 @@ def botRespuestasPlanas():
             print("No entiendo su pregunta")
 
 
+
+
+
 def botRespuestasRegex():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
     salir_opcion = False
@@ -27,11 +30,11 @@ def botRespuestasRegex():
             botRespuestasRegex1()
         elif pregunta == "¿Cuando es la próxima carrera de formula 1?":
             botRespuestasRegex2()
-        elif pregunta == "¿Que tiempo va a hacer mañana?":
+        elif pregunta == "¿Que tiempo va a hacer mañana?" or pregunta == "Que tiempo va a hacer mañana":
             botRespuestasRegex4()
-        elif pregunta == "¿Dime un número aleatorio del 1 al 10?":
+        elif pregunta == "¿Dime un número aleatorio del 1 al 10?" or pregunta == "Dime un numero aleatorio del 1 al 10":
             botRespuestasRegex5()
-        elif pregunta == "¿Que día es mañana?":
+        elif pregunta == "¿Que día es mañana?" or pregunta == "Que dia es mañana":
             botRespuestasRegex3()
         elif pregunta == "Hola, soy Alex":
             botRespuestasRegex6(pregunta)
@@ -39,7 +42,7 @@ def botRespuestasRegex():
             salir_opcion = True
         else:
             botRespuestasRegex6(pregunta)
-            #print("No entiendo su pregunta")
+            # print("No entiendo su pregunta")
 
 
 def botRespuestasRegex1():
@@ -74,15 +77,14 @@ def botRespuestasRegex3():
 
 
 def botRespuestasRegex6(pregunta):
-    palabra1 = 'hola'
+    patron = "^Hola|^hola|Soy|soy"
+    encontrado = re.search(patron, pregunta)
 
-    encontrado = re.search(palabra1,  pregunta)
-
-    if encontrado:
-       nombre = pregunta.split()
-       print("Muy buenas," + nombre[-1] + " Soy Botarate:")
+    if encontrado is not None:
+        nombre = pregunta.split()
+        print("Muy buenas " + nombre[-1] + " ,Soy Botarate:")
     else:
-       print("No se ha encontrado la palabra:", palabra1)
+        print("No se ha encontrado la palabra:")
 
 
 
