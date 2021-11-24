@@ -5,12 +5,18 @@ from collections import defaultdict
 
 today = date.today()  # Fecha del sistema en el momento de la conversión a pdf ¿¿Fecha de conversación original??
 
+conversacion = open('conversación.txt', "r", encoding="utf-8")
+lines = conversacion.read()
 c = canvas.Canvas("conversación.pdf", pagesize=A4)
-conversacion = open('conversación.txt', encoding="utf-8").read()
-c.drawString(50, 500, str(conversacion))  # Los saltos de línea no se imprimen como carácteres reconocibles
+y = 500
 
-numcar = len(conversacion)  # Conteo de carácteres
-listpal = conversacion.split()  # Split de la cadena
+for line in lines.split('\n'):
+    c.drawString(50, y, line)
+    y = y - 25
+
+
+numcar = len(lines)  # Conteo de carácteres
+listpal = lines.split()  # Split de la cadena
 numpal = len(listpal)  # Conteo de palabras en cadena
 
 temp = defaultdict(int)
@@ -20,18 +26,12 @@ for sub in listpal:
         temp[wrd] += 1
 
 palrep = max(temp, key=temp.get)
-numrep = int(0)
-
-
-for item in listpal:
-    if palrep in listpal:
-        numrep += 1
-strnumrep = str(numrep)
+numrep = listpal.count(palrep)
 
 c.drawImage("img.png", 100, 600, width=400, height=200)  # Imagen del directorio
 c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
 c.drawString(50, 100, 'La conversación es del '+str(today)+'.')  # CAMBIAR A FECHA DE LA CONVERSACIÓN DESDE TXT
 c.drawString(50, 75, 'Consta de '+str(numcar)+' caracteres.')
 c.drawString(50, 50, 'Está compuesta por '+str(numpal)+' palabras.')
-c.drawString(50, 25, 'La palabra '+str(palrep)+' se repite '+strnumrep+' veces.')
+c.drawString(50, 25, 'La palabra '+str(palrep)+' se repite '+str(numrep)+' veces.')
 c.save()
