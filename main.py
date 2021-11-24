@@ -36,8 +36,6 @@ def botRespuestasRegex():
             botRespuestasRegex5()
         elif pregunta == "¿Que día es mañana?" or pregunta == "Que dia es mañana":
             botRespuestasRegex3()
-        elif pregunta == "Hola, soy Alex":
-            botRespuestasRegex6(pregunta)
         elif pregunta == "Salir":
             salir_opcion = True
         else:
@@ -64,6 +62,10 @@ def botRespuestasRegex5():
     random_index = random.randrange(1, 10)
     print(random_index)
 
+def botRespuestasRegex7():
+    random_index = random.randrange(1, 9999999)
+    print(random_index)
+
 
 def botRespuestasRegex3():
     dias = {'0': 'Domingo', '1': 'lunes', '2': 'Martes', '3': 'Miércoles','4': 'Jueves', '5': 'Viernes', '6': 'Sábado' }
@@ -79,12 +81,30 @@ def botRespuestasRegex3():
 def botRespuestasRegex6(pregunta):
     patron = "^Hola|^hola|Soy|soy"
     encontrado = re.search(patron, pregunta)
+    patron2 = "(Carrera|carrera)*(Formula 1|formula 1)"
+    encontrado1 = re.search(patron2, pregunta)
+    patron3 = "(Equipo|equipo)*(Futbol|futbol)"
+    encontrado2 = re.search(patron3, pregunta)
+    patron4 = "(Tiempo|tiempo)*(Mañana|mañana)"
+    encontrado3 = re.search(patron4, pregunta)
+    patron5 = "(Número|número)*(Aleatorio|aleatorio)"
+    encontrado4 = re.search(patron5, pregunta)
 
     if encontrado is not None:
         nombre = pregunta.split()
         print("Muy buenas " + nombre[-1] + " ,Soy Botarate:")
+    elif encontrado1 is not None:
+        print(botRespuestasRegex2())
+    elif encontrado2 is not None:
+        print(botRespuestasRegex1())
+    elif encontrado3 is not None:
+        print(botRespuestasRegex4())
+    elif encontrado4 is not None:
+        print(botRespuestasRegex7())
     else:
-        print("No se ha encontrado la palabra:")
+        print("No entiendo su pregunta")
+
+
 
 
 
