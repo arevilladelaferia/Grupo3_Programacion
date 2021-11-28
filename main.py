@@ -49,7 +49,7 @@ def botRespuestasRegex1():
     print(repuesta[random_index])
 
 def botRespuestasRegex2():
-    repuesta = ["28-28 de marzo en Sakhir.", "16-18 de abril en Imola.", "30-2 de mayo e Portimao.", "7-9 de mayo en Catalunya.", "20-23 de mayo en Montecarlo.", "4-6 de junio en Baku city circuit."]
+    repuesta = ["28-29 de marzo en Sakhir.", "16-18 de abril en Imola.", "30-2 de mayo e Portimao.", "7-9 de mayo en Catalunya.", "20-23 de mayo en Montecarlo.", "4-6 de junio en Baku city circuit."]
     random_index = random.randint(0, len(repuesta) - 1)
     print("La próxima carrera sera del", repuesta[random_index])
 
@@ -94,13 +94,13 @@ def botRespuestasRegex6(pregunta):
         nombre = pregunta.split()
         print("Muy buenas " + nombre[-1] + " ,Soy Botarate:")
     elif encontrado1 is not None:
-        print(botRespuestasRegex2())
+        botRespuestasRegex2()
     elif encontrado2 is not None:
-        print(botRespuestasRegex1())
+        botRespuestasRegex1()
     elif encontrado3 is not None:
-        print(botRespuestasRegex4())
+        botRespuestasRegex4()
     elif encontrado4 is not None:
-        print(botRespuestasRegex7())
+        botRespuestasRegex7()
     else:
         print("No entiendo su pregunta")
 
