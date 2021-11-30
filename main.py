@@ -28,7 +28,7 @@ for sub in listpal:
 palrep = max(temp, key=temp.get)
 numrep = listpal.count(palrep)
 
-c.drawImage("img.png", 100, 600, width=400, height=200)  # Imagen del directorio
+c.drawImage("chatbot_python.jpg", 100, 600, width=400, height=200)  # Imagen del directorio
 c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
 c.drawString(50, 100, 'La conversación es del '+str(today)+'.')  # CAMBIAR A FECHA DE LA CONVERSACIÓN DESDE TXT
 c.drawString(50, 75, 'Consta de '+str(numcar)+' caracteres.')
