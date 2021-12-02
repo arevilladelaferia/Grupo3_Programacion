@@ -12,8 +12,11 @@ from reportlab.lib.units import mm
 def botRespuestasPlanas():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
     salir_opcion = False
+    # inicializo un bucle para que el bot escuche
     while not salir_opcion:
         pregunta = input("> ")
+        # compruebo si la pregunta esta en el diccionario de preguntas_respuestas
+        # si esta imprimo la respuesta por pantalla
         if pregunta in preguntas_respuestas:
             print("> " + preguntas_respuestas[pregunta])
         elif pregunta == "Salir":
@@ -27,8 +30,10 @@ def botRespuestasPlanas():
 def botRespuestasRegex():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
     salir_opcion = False
+    # inicializo un bucle para que el bot escuche
     while not salir_opcion:
         pregunta = input("> ")
+        # inicializo diferentes patrones regex para el bot
         patron = "^Hola|^hola|Soy|soy"
         patron2 = "(Carrera|carrera)*(Formula 1|formula 1)"
         patron3 = "(Equipo|equipo)*(Futbol|futbol)"
@@ -37,7 +42,7 @@ def botRespuestasRegex():
         patron6 = "(Dia|dia)*(Mañana|mañana)"
         patron7 = "(Quien|quien)*(Creado|creado)"
         patron8 = "(Salir|salir)"
-
+        # el programa detecta si la pregunta esta definida en un patron y entra en su función
         if re.search(patron, pregunta):
             botRespuestasRegexsaludo(pregunta)
         elif re.search(patron2, pregunta):
@@ -55,7 +60,7 @@ def botRespuestasRegex():
         elif re.search(patron8, pregunta):
             break
         else:
-            print("No entiendo su pregunta")
+            print("> No entiendo su pregunta")
 
 
 def botRespuestasRegexcreado():
@@ -63,17 +68,20 @@ def botRespuestasRegexcreado():
 
 
 def botRespuestasRegexsaludo(pregunta):
+    # realizo un split a la pregunta para obtener el nombre de la persona
     nombre = pregunta.split()
     print("> Muy buenas " + nombre[-1] + ", Soy Botarate:")
 
 
 def botRespuestasRegexequipo():
+    # realizo una lista con datos para su siguiente randomización
     repuesta = ["Real Betis", "Real Madrid", "Barcelona", "Livepool", "Getafe", "Real Sociedad", "Monaco", "PSG"]
     random_index = random.randint(0, len(repuesta) - 1)
     print("> Hoy juega el " + repuesta[random_index])
 
 
 def botRespuestasRegexformula1():
+    # realizo una lista con datos para su siguiente randomización
     repuesta = ["28-29 de marzo en Sakhir.", "16-18 de abril en Imola.", "30-2 de mayo e Portimao.",
                 "7-9 de mayo en Catalunya.", "20-23 de mayo en Montecarlo.", "4-6 de junio en Baku city circuit."]
     random_index = random.randint(0, len(repuesta) - 1)
@@ -81,18 +89,21 @@ def botRespuestasRegexformula1():
 
 
 def botRespuestasRegextiempo():
+    # realizo una lista con datos para su siguiente randomización
     repuesta = ["llovizna.", "lluvia.", "nieve.", "granizo.", "agua y nieve.", "lluvia congelada."]
     random_index = random.randint(0, len(repuesta) - 1)
     print("> La prediccion de hoy es de", repuesta[random_index])
 
 
 def botRespuestasRegexnumale():
+    # implemento la librería random para obtener números random
     print("> Su numero aleatorio es:", random.randint(1, 9999999))
 
 
 def botRespuestasRegexdia():
+    # realizo una biblioteca con datos para saber el dia
     dias = {'0': 'Domingo', '1': 'lunes', '2': 'Martes', '3': 'Miércoles', '4': 'Jueves', '5': 'Viernes', '6': 'Sábado'}
-
+    # utilizo la librería datetime para obtener el dia de mañana
     hoy = datetime.today()  # Obtener la fecha de hoy
     hoy = hoy + timedelta(days=1)  # le sumamos un dia mas
     dia = hoy.strftime('%w')  # obtengo el numero de dia
@@ -100,7 +111,8 @@ def botRespuestasRegexdia():
 
 
 def guardarinfotxt(pregunta, respuesta_pregunta):
-    with open("conversación.txt", "a") as f:
+    # introduzco la conversación de los ficheros en un archivo txt
+    with open("conversación.txt", "a", encoding="utf-8") as f:
         conversacion = "> " + str(pregunta) + "\n> " + str(respuesta_pregunta + "\n")
         f.write(conversacion)
 
@@ -108,7 +120,9 @@ def guardarinfotxt(pregunta, respuesta_pregunta):
 def bot_ficheros():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
     salir_opcion = False
+    # inicializo un bucle para que el bot escuche
     while not salir_opcion:
+        # abro el archivo json e introduzco los datos de las con las preguntas y respuestas del bot regex
         with open('pyr.json', 'w') as f:
             pyr = {"pregunta1": "^Hola|^hola|Soy|soy",
                    "respuesta1": "Muy buenas, (variable). Soy Botarate",
@@ -117,11 +131,11 @@ def bot_ficheros():
                    "pregunta3": "(Equipo|equipo)*(Futbol|futbol)",
                    "respuesta3": "Hoy juega el (variable)",
                    "pregunta4": "(Tiempo|tiempo)",
-                   "respuesta4": "La prediccion de hoy es de (variable)",
+                   "respuesta4": "La predicción de hoy es de (variable)",
                    "pregunta5": "(Número|número)*(Aleatorio|aleatorio)",
                    "respuesta5": "Su numero aleatorio es: (variable)",
                    "pregunta6": "(Dia|dia)*(Mañana|mañana)",
-                   "respuesta6": "Mañana será (variable)",
+                   "respuesta6": "Mañana sera (variable)",
                    "pregunta7": "(Quien|quien)*(Creado|creado)",
                    "respuesta7": "Me ha creado el grupo 3",
                    "pregunta8": "(Salir|salir)"
@@ -130,65 +144,88 @@ def bot_ficheros():
 
         with open('pyr.json', 'r') as f:
             conj_datos = json.load(f)
-
+        # machaco conversación.txt para cada vez que reinicio la opción la conversación se reinicie
         with open("conversación.txt", "w") as f:
             f.close()
+        # inicializo un bucle para que el bot escuche
         while True:
             pregunta = input("> ")
+            # el programa detecta si la pregunta esta definida en un patron y entra en su función
             if re.search(conj_datos["pregunta1"], pregunta):
+                # realizo un split a la pregunta para obtener el nombre de la persona
                 nombre = pregunta.split()
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta1"]
                 respuesta_pregunta = respuesta_pregunta.replace("(variable)", nombre[-1])
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
 
             elif re.search(conj_datos["pregunta2"], pregunta):
+                # realizo una lista con datos para su siguiente randomización
                 respuesta = ["28-29 de marzo en Sakhir.", "16-18 de abril en Imola.", "30-2 de mayo e Portimao.",
                              "7-9 de mayo en Catalunya.", "20-23 de mayo en Montecarlo.",
                              "4-6 de junio en Baku city circuit."]
                 random_index = random.randint(0, len(respuesta) - 1)
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta2"]
                 respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[random_index])
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
 
             elif re.search(conj_datos["pregunta3"], pregunta):
+                # realizo una lista con datos para su siguiente randomización
                 respuesta = ["Real Betis", "Real Madrid", "Barcelona", "Livepool", "Getafe", "Real Sociedad", "Monaco",
                              "PSG"]
                 random_index = random.randint(0, len(respuesta) - 1)
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta3"]
                 respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[random_index])
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
 
             elif re.search(conj_datos["pregunta4"], pregunta):
+                # realizo una lista con datos para su siguiente randomización
                 respuesta = ["llovizna.", "lluvia.", "nieve.", "granizo.", "agua y nieve.", "lluvia congelada."]
                 random_index = random.randint(0, len(respuesta) - 1)
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta4"]
                 respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[random_index])
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
 
             elif re.search(conj_datos["pregunta5"], pregunta):
+                # implemento la librería random para obtener números random
                 respuesta = random.randint(1, 9999999)
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta5"]
                 respuesta_pregunta = respuesta_pregunta.replace("(variable)", str(respuesta))
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
 
             elif re.search(conj_datos["pregunta6"], pregunta):
+                # realizo una biblioteca con datos para saber el dia
                 respuesta = {'0': 'Domingo', '1': 'lunes', '2': 'Martes', '3': 'Miércoles', '4': 'Jueves',
                              '5': 'Viernes',
                              '6': 'Sábado'}
+                # utilizo la librería datetime para obtener el dia de mañana
                 hoy = datetime.today()  # Obtener la fecha de hoy
                 hoy = hoy + timedelta(days=1)  # le sumamos un dia mas
                 dia = hoy.strftime('%w')  # obtengo el numero de dia
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta6"]
                 respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[dia])
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
 
             elif re.search(conj_datos["pregunta7"], pregunta):
+                # busco la respuesta en la variable conj_datos con los datos del fichero,
+                # imprimo la respuesta y la guardo en el txt
                 respuesta_pregunta = conj_datos["respuesta7"]
                 print(">", respuesta_pregunta)
                 guardarinfotxt(pregunta, respuesta_pregunta)
@@ -197,8 +234,9 @@ def bot_ficheros():
                 salir_opcion = True
                 break
             else:
+                # guardo la información en el txt
                 guardarinfotxt(pregunta, "No entiendo su pregunta")
-                print("No entiendo su pregunta")
+                print("> No entiendo su pregunta")
 
 
 def botInformeConver():
@@ -212,12 +250,13 @@ def botInformeConver():
     c.drawImage("chatbot_python.jpg", 100, 600, width=400, height=200)  # Imagen del directorio
     c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
 
-    for line in lines.split('\n'):  # Con un replace eliminamos ">" y los espacios para que el programa no los cuente como palabras
+    for line in lines.split(
+            '\n'):  # Con un replace eliminamos ">" y los espacios para que el programa no los cuente como palabras
         line = line.replace(" ", "")
         line = line.replace(">", "")
         lines2 += line
 
-    numcar = len(lines2)  # Conteo de carácteres
+    numcar = len(lines2)  # Conteo de caracteres
     lines2 = ""
     for line in lines.split("\n"):
         line = line.replace(">", " ")
@@ -262,12 +301,13 @@ def botInformeConver():
     c.drawString(50, y - 75, 'Está compuesta por ' + str(numpal) + ' palabras.')
     c.drawString(50, y - 100, 'La palabra ' + str(palrep) + ' se repite ' + str(numrep) + ' veces.')
     c.save()  # Guardamos documento
-    print("El PDF ha sido creado \n")
+    print("\nEl PDF ha sido creado \n")
 
 
+# inicializo un diccionario con las preguntas y respuestas del bot
 preguntas_respuestas = {"¿Que equipo de futbol juega hoy?": "Hoy juega el Betis",
                         "¿Cuando es la próxima carrera de formula 1?": "28-29 de marzo en Sakhir.",
-                        "¿Que día es mañana?": "Mañana será Miercoles",
+                        "¿Que día es mañana?": "Mañana será Miércoles",
                         "¿Que tiempo va a hacer hoy?": "Parcialmente todo el dia soleado.",
                         "¿Dime un número aleatorio del 1 al 10?": "Su numero aleatorio es: 929293",
                         "Hola, soy Alex": "Muy buenas, Alex. Soy Botarate",
@@ -277,13 +317,14 @@ salir = False
 opcion = 0
 
 print("\t\t\t\t\t\033[1m\033[4mAPLICACIÓN BOT-ARATE\033[0m \n")
+# implemento un menu principal
 while not salir:
     print("\t\t\t1) Bot simple (respuestas planas...)")
     print("\t\t\t2) Bot simple (respuestas REGEX)")
     print("\t\t\t3) Bot simple mejorado desde fichero")
     print("\t\t\t4) Informe de la conversación (PDF)")
     print("\t\t\t5) Salir\n")
-    opcion = int(input("\t\t\tOpcion: "))
+    opcion = int(input("\t\t\tOpción: "))
 
     if opcion == 1:
         botRespuestasPlanas()
