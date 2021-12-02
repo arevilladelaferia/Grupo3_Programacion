@@ -6,6 +6,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from datetime import date
 from collections import defaultdict
+from reportlab.lib.units import mm
 
 
 def botRespuestasPlanas():
@@ -201,25 +202,23 @@ def bot_ficheros():
 
 
 def botInformeConver():
-    today = date.today()  # Fecha del sistema en el momento de la conversión a pdf ¿¿Fecha de conversación original??
-
-    conversacion = open('conversación.txt', "r", encoding="utf-8")
+    today = date.today()  # Obtenemos fecha del sistema
+    conversacion = open('conversación.txt', "r", encoding="utf-8")  # Abrimos conversación.txt
     lines = conversacion.read()
     lines2 = ""
-    c = canvas.Canvas("conversación.pdf", pagesize=A4)
+    c = canvas.Canvas("conversación.pdf", pagesize=A4)  # Creamos el pdf
     y = 500
 
-    for line in lines.split('\n'):
-        c.drawString(50, y, line)
-        y = y - 25
+    c.drawImage("chatbot_python.jpg", 100, 600, width=400, height=200)  # Imagen del directorio
+    c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
 
-    for line in lines.split('\n'):
+    for line in lines.split('\n'):  # Con un replace eliminamos ">" y los espacios para que el programa no los cuente como palabras
         line = line.replace(" ", "")
         line = line.replace(">", "")
         lines2 += line
 
     numcar = len(lines2)  # Conteo de carácteres
-    lines2=""
+    lines2 = ""
     for line in lines.split("\n"):
         line = line.replace(">", " ")
         lines2 += line
@@ -241,16 +240,28 @@ def botInformeConver():
         for wrd in sub.split():
             temp[wrd] += 1
 
-    palrep = max(temp, key=temp.get)
+    palrep = max(temp, key=temp.get)  # En estas variables se almacenan la palabra más repetida y el nº de veces
     numrep = listpal2.count(palrep)
 
-    c.drawImage("chatbot_python.jpg", 100, 600, width=400, height=200)  # Imagen del directorio
-    c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
-    c.drawString(50, 100, 'La conversación es del ' + str(today) + '.')  # CAMBIAR A FECHA DE LA CONVERSACIÓN DESDE TXT
-    c.drawString(50, 75, 'Consta de ' + str(numcar) + ' caracteres.')
-    c.drawString(50, 50, 'Está compuesta por ' + str(numpal) + ' palabras.')
-    c.drawString(50, 25, 'La palabra ' + str(palrep) + ' se repite ' + str(numrep) + ' veces.')
-    c.save()
+    def addpagenumber():  # Función para escribir el número de página
+        page_num = c.getPageNumber()
+        text = "Página #%s" % page_num
+        c.drawRightString(200 * mm, 20 * mm, text)
+
+    for line in lines.split('\n'):  # Vamos escribiendo línea por línea en el pdf
+        c.drawString(50, y, line)
+        y = y - 25  # Así hacemos que cada línea esté separada por 25 pixeles
+        if y == 25:  # Al llegar a la altura que deseamos, se imprime el nº de página y se salta a la página siguiente
+            addpagenumber()
+            c.showPage()
+            y = 800  # Establecemos la altura arriba del documento para la siguiente página y repetimos
+
+    addpagenumber()  # Para imprimir el número de página de la página final
+    c.drawString(50, y - 25, 'La conversación es del ' + str(today) + '.')  # Datos del informe de la conversación
+    c.drawString(50, y - 50, 'Consta de ' + str(numcar) + ' caracteres.')
+    c.drawString(50, y - 75, 'Está compuesta por ' + str(numpal) + ' palabras.')
+    c.drawString(50, y - 100, 'La palabra ' + str(palrep) + ' se repite ' + str(numrep) + ' veces.')
+    c.save()  # Guardamos documento
     print("El PDF ha sido creado \n")
 
 
