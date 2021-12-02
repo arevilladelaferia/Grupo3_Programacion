@@ -1,7 +1,11 @@
-import random
 import re
+import json
+import random
 from datetime import datetime, timedelta
-
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from datetime import date
+from collections import defaultdict
 
 def botRespuestasPlanas():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
@@ -93,19 +97,107 @@ def botRespuestasRegexdia():
     print("> Mañana será " + dias[dia])
 
 
-preguntas_respuestas = {"¿Que equipo de futbol juega hoy?": "Hoy juega el Betis",
-                        "¿Cuando es la próxima carrera de formula 1?": "28-29 de marzo en Sakhir.",
-                        "¿Que día es mañana?": "Mañana será Miercoles",
-                        "¿Que tiempo va a hacer hoy?": "Parcialmente todo el dia soleado.",
-                        "¿Dime un número aleatorio del 1 al 10?": "Su numero aleatorio es: 929293",
-                        "Hola, soy Alex": "Muy buenas, Alex. Soy Botarate",
-                        "¿Quien te ha creado?": "Me ha creado el grupo 3"}
+def guardarinfotxt(pregunta, respuesta_pregunta):
+    with open("conversación.txt", "a") as f:
+        conversacion = "> " + str(pregunta) + "\n> " + str(respuesta_pregunta + "\n")
+        f.write(conversacion)
+
+
+def bot_ficheros():
+    print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
+    salir_opcion = False
+    while not salir_opcion:
+        with open('pyr.json', 'w') as f:
+            pyr = {"pregunta1": "^Hola|^hola|Soy|soy",
+                   "respuesta1": "Muy buenas, (variable). Soy Botarate",
+                   "pregunta2": "(Carrera|carrera)*(Formula 1|formula 1)",
+                   "respuesta2": "La próxima carrera sera del (variable)",
+                   "pregunta3": "(Equipo|equipo)*(Futbol|futbol)",
+                   "respuesta3": "Hoy juega el (variable)",
+                   "pregunta4": "(Tiempo|tiempo)",
+                   "respuesta4": "La prediccion de hoy es de (variable)",
+                   "pregunta5": "(Número|número)*(Aleatorio|aleatorio)",
+                   "respuesta5": "Su numero aleatorio es: (variable)",
+                   "pregunta6": "(Dia|dia)*(Mañana|mañana)",
+                   "respuesta6": "Mañana será (variable)",
+                   "pregunta7": "(Quien|quien)*(Creado|creado)",
+                   "respuesta7": "Me ha creado el grupo 3",
+                   "pregunta8": "(Salir|salir)"
+                   }
+            json.dump(pyr, f)
+
+        with open('pyr.json', 'r') as f:
+            conj_datos = json.load(f)
+
+        with open("conversación.txt", "w") as f:
+            f.close()
+        while True:
+            pregunta = input("> ")
+            if re.search(conj_datos["pregunta1"], pregunta):
+                nombre = pregunta.split()
+                respuesta_pregunta = conj_datos["respuesta1"]
+                respuesta_pregunta = respuesta_pregunta.replace("(variable)", nombre[-1])
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta2"], pregunta):
+                respuesta = ["28-29 de marzo en Sakhir.", "16-18 de abril en Imola.", "30-2 de mayo e Portimao.",
+                             "7-9 de mayo en Catalunya.", "20-23 de mayo en Montecarlo.",
+                             "4-6 de junio en Baku city circuit."]
+                random_index = random.randint(0, len(respuesta) - 1)
+                respuesta_pregunta = conj_datos["respuesta2"]
+                respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[random_index])
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta3"], pregunta):
+                respuesta = ["Real Betis", "Real Madrid", "Barcelona", "Livepool", "Getafe", "Real Sociedad", "Monaco",
+                             "PSG"]
+                random_index = random.randint(0, len(respuesta) - 1)
+                respuesta_pregunta = conj_datos["respuesta3"]
+                respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[random_index])
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta4"], pregunta):
+                respuesta = ["llovizna.", "lluvia.", "nieve.", "granizo.", "agua y nieve.", "lluvia congelada."]
+                random_index = random.randint(0, len(respuesta) - 1)
+                respuesta_pregunta = conj_datos["respuesta4"]
+                respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[random_index])
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta5"], pregunta):
+                respuesta = random.randint(1, 9999999)
+                respuesta_pregunta = conj_datos["respuesta5"]
+                respuesta_pregunta = respuesta_pregunta.replace("(variable)", str(respuesta))
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta6"], pregunta):
+                respuesta = {'0': 'Domingo', '1': 'lunes', '2': 'Martes', '3': 'Miércoles', '4': 'Jueves',
+                             '5': 'Viernes',
+                             '6': 'Sábado'}
+                hoy = datetime.today()  # Obtener la fecha de hoy
+                hoy = hoy + timedelta(days=1)  # le sumamos un dia mas
+                dia = hoy.strftime('%w')  # obtengo el numero de dia
+                respuesta_pregunta = conj_datos["respuesta6"]
+                respuesta_pregunta = respuesta_pregunta.replace("(variable)", respuesta[dia])
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta7"], pregunta):
+                respuesta_pregunta = conj_datos["respuesta7"]
+                print(">", respuesta_pregunta)
+                guardarinfotxt(pregunta, respuesta_pregunta)
+
+            elif re.search(conj_datos["pregunta8"], pregunta):
+                salir_opcion = True
+                break
+            else:
+                print("No entiendo su pregunta")
 
 def botInformeConver():
-    from reportlab.pdfgen import canvas
-    from reportlab.lib.pagesizes import A4
-    from datetime import date
-    from collections import defaultdict
 
     today = date.today()  # Fecha del sistema en el momento de la conversión a pdf ¿¿Fecha de conversación original??
 
@@ -117,8 +209,8 @@ def botInformeConver():
     for line in lines.split('\n'):
         c.drawString(50, y, line)
         y = y - 25
-
-
+    for line in lines.split("\n"):
+        line.replace(">", "")
     numcar = len(lines)  # Conteo de carácteres
     listpal = lines.split()  # Split de la cadena
     numpal = len(listpal)  # Conteo de palabras en cadena
@@ -134,11 +226,20 @@ def botInformeConver():
 
     c.drawImage("chatbot_python.jpg", 100, 600, width=400, height=200)  # Imagen del directorio
     c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
-    c.drawString(50, 100, 'La conversación es del '+str(today)+'.')  # CAMBIAR A FECHA DE LA CONVERSACIÓN DESDE TXT
-    c.drawString(50, 75, 'Consta de '+str(numcar)+' caracteres.')
-    c.drawString(50, 50, 'Está compuesta por '+str(numpal)+' palabras.')
-    c.drawString(50, 25, 'La palabra '+str(palrep)+' se repite '+str(numrep)+' veces.')
+    c.drawString(50, 100, 'La conversación es del ' + str(today) + '.')  # CAMBIAR A FECHA DE LA CONVERSACIÓN DESDE TXT
+    c.drawString(50, 75, 'Consta de ' + str(numcar) + ' caracteres.')
+    c.drawString(50, 50, 'Está compuesta por ' + str(numpal) + ' palabras.')
+    c.drawString(50, 25, 'La palabra ' + str(palrep) + ' se repite ' + str(numrep) + ' veces.')
     c.save()
+    print("El PDF ha sido creado \n")
+
+preguntas_respuestas = {"¿Que equipo de futbol juega hoy?": "Hoy juega el Betis",
+                        "¿Cuando es la próxima carrera de formula 1?": "28-29 de marzo en Sakhir.",
+                        "¿Que día es mañana?": "Mañana será Miercoles",
+                        "¿Que tiempo va a hacer hoy?": "Parcialmente todo el dia soleado.",
+                        "¿Dime un número aleatorio del 1 al 10?": "Su numero aleatorio es: 929293",
+                        "Hola, soy Alex": "Muy buenas, Alex. Soy Botarate",
+                        "¿Quien te ha creado?": "Me ha creado el grupo 3"}
 
 salir = False
 opcion = 0
@@ -157,7 +258,7 @@ while not salir:
     elif opcion == 2:
         botRespuestasRegex()
     elif opcion == 3:
-        print("\t\t\t3) Bot simple mejorado desde fichero")
+        bot_ficheros()
     elif opcion == 4:
         botInformeConver()
     elif opcion == 5:
