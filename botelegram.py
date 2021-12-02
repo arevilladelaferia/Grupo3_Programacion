@@ -2,7 +2,10 @@ from telegram.ext import (Updater, CommandHandler)
 import random
 
 
+# importar librería por terminal: pip3 install python-telegram-bot
+
 def ods_aleatorio():
+    # inicializo una lista con todas las str
     ods_list = [
         "Erradicar la pobreza en todas sus formas sigue siendo uno de los principales desafíos que enfrenta la humanidad. Si bien la cantidad de personas que viven en la extrema pobreza disminuyó en más de la mitad entre 1990 y 2015, aún demasiadas luchan por satisfacer las necesidades más básicas. ",
         "Los Objetivos de Desarrollo Sostenible buscan terminar con todas las formas de hambre y desnutrición para 2030 y velar por el acceso de todas las personas, en especial los niños, a una alimentación suficiente y nutritiva durante todo el año. Esta tarea implica promover prácticas agrícolas sostenibles a través del apoyo a los pequeños agricultores y el acceso igualitario a la tierra, la tecnología y los mercados. Además, se requiere el fomento de la cooperación internacional para asegurar la inversión en la infraestructura y la tecnología necesaria para mejorar la productividad agrícola.",
@@ -21,10 +24,12 @@ def ods_aleatorio():
         "Los Objetivos de Desarrollo Sostenible buscan reducir sustancialmente todas las formas de violencia y trabajan con los gobiernos y las comunidades para encontrar soluciones duraderas a los conflictos e inseguridad. El fortalecimiento del Estado de derecho y la promoción de los derechos humanos es fundamental en este proceso, así como la reducción del flujo de armas ilícitas y la consolidación de la participación de los países en desarrollo en las instituciones de gobernabilidad mundial.",
         "La finalidad de los objetivos es mejorar la cooperación Norte-Sur y Sur-Sur, apoyando los planes nacionales en el cumplimiento de todas las metas. Promover el comercio internacional y ayudar a los países en desarrollo para que aumenten sus exportaciones, forma parte del desafío de lograr un sistema de comercio universal equitativo y basado en reglas que sea justo, abierto y beneficie a todos.",
         "Los Objetivos de Desarrollo Sostenible generan un marco para ordenar y proteger de manera sostenible los ecosistemas marinos y costeros de la contaminación terrestre, así como para abordar los impactos de la acidificación de los océanos. Mejorar la conservación y el uso sostenible de los recursos oceánicos a través del derecho internacional también ayudará a mitigar algunos de los retos que enfrentan los océanos."]
+    # devuelvo una función random de dicha lista
     return random.choice(ods_list)
 
 
 def cita_aleatorio():
+    # inicializo una lista con todas las str
     cita_list = ["Al no ser los únicos, decidimos ser los mejores. (Gorka Lomeña)",
                  "Con demasiada frecuencia damos a los estudiantes respuestas para recordar en lugar de problemas para resolver (Roger Lewin)",
                  "Si la depuración es el proceso de eliminar errores, entonces la programación debe ser el proceso de introducirlos. (Edsger Dijkstra)",
@@ -39,11 +44,13 @@ def cita_aleatorio():
                  "La práctica te perfecciona. Descubre cuánta práctica necesitas tú. (Alex Tolón)",
                  "Un problema se transforma en desafío cuando le pones fecha de solución. (Anónimo)",
                  "Un problema se transforma en desafío cuando le pones fecha de solución. (Anónimo)"]
+    # devuelvo una función random de dicha lista
     return random.choice(cita_list)
 
 
 def inicio(update, context):
     # Enviar un mensaje a un ID determinado.
+    # Utilizo una variable booleana global para activar o desactivar el bot
     context.bot.send_message(update.message.chat_id, "Oído cocina. Tú dirás...")
     global inicio_bot
     inicio_bot = True
@@ -51,12 +58,15 @@ def inicio(update, context):
 
 def ods(update, context):
     # Enviar un mensaje a un ID determinado.
+    # Utilizo una variable booleana global para activar o desactivar el bot
+    global inicio_bot
     if inicio_bot == True:
         context.bot.send_message(update.message.chat_id, ods_aleatorio())
 
 
 def cita(update, context):
     # Enviar un mensaje a un ID determinado.
+    # Utilizo una variable booleana global para activar o desactivar el bot
     global inicio_bot
     if inicio_bot == True:
         context.bot.send_message(update.message.chat_id, cita_aleatorio())
@@ -64,21 +74,23 @@ def cita(update, context):
 
 def final(update, context):
     # Enviar un mensaje a un ID determinado.
-
+    # Utilizo una variable booleana global para activar o desactivar el bot
     global inicio_bot
-    if inicio_bot==True:
+    if inicio_bot == True:
         context.bot.send_message(update.message.chat_id,
                                  "¡Que pases un buen día!")
         inicio_bot = False
 
 
+# inicializo mi bot de teegram
 TOKEN = "2119015416:AAEvm_Tf4oNQZaDlGr3JkM4Gt8L7G52yAH8"
 updater = Updater(TOKEN, use_context=True)
 dp = updater.dispatcher
 
 inicio_bot = False
+# Comienza el bot
 updater.start_polling()
-
+# imprimo por el bot de telegram según el patrón enviado
 dp.add_handler(CommandHandler('inicio', inicio))
 dp.add_handler(CommandHandler('ods', ods))
 dp.add_handler(CommandHandler('cita', cita))
