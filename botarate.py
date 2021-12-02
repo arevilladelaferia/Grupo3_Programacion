@@ -7,6 +7,7 @@ from reportlab.lib.pagesizes import A4
 from datetime import date
 from collections import defaultdict
 
+
 def botRespuestasPlanas():
     print("\nBot a la escucha... (pregunta cuando quieras) -- Si no quieres preguntar nada escribe: Salir -- ")
     salir_opcion = False
@@ -195,34 +196,53 @@ def bot_ficheros():
                 salir_opcion = True
                 break
             else:
+                guardarinfotxt(pregunta, "No entiendo su pregunta")
                 print("No entiendo su pregunta")
 
-def botInformeConver():
 
+def botInformeConver():
     today = date.today()  # Fecha del sistema en el momento de la conversión a pdf ¿¿Fecha de conversación original??
 
     conversacion = open('conversación.txt', "r", encoding="utf-8")
     lines = conversacion.read()
+    lines2 = ""
     c = canvas.Canvas("conversación.pdf", pagesize=A4)
     y = 500
 
     for line in lines.split('\n'):
         c.drawString(50, y, line)
         y = y - 25
+
+    for line in lines.split('\n'):
+        line = line.replace(" ", "")
+        line = line.replace(">", "")
+        lines2 += line
+
+    numcar = len(lines2)  # Conteo de carácteres
+    lines2=""
     for line in lines.split("\n"):
-        line.replace(">", "")
-    numcar = len(lines)  # Conteo de carácteres
-    listpal = lines.split()  # Split de la cadena
+        line = line.replace(">", " ")
+        lines2 += line
+
+    listpal = lines2.split()  # Split de la cadena
     numpal = len(listpal)  # Conteo de palabras en cadena
 
     temp = defaultdict(int)
 
-    for sub in listpal:
+    lines2 = ""
+    for line in lines.split('\n'):
+        line = line.replace(">", " ")
+        line = line.replace(".", " ")
+        line = line.replace(",", " ")
+        lines2 += line
+
+    listpal2 = lines2.split()  # Split de la cadena
+    for sub in listpal2:
         for wrd in sub.split():
             temp[wrd] += 1
 
     palrep = max(temp, key=temp.get)
-    numrep = listpal.count(palrep)
+    numrep = listpal2.count(palrep)
 
     c.drawImage("chatbot_python.jpg", 100, 600, width=400, height=200)  # Imagen del directorio
     c.drawString(100, 575, 'INFORME DE LA CONVERSACIÓN')
@@ -232,6 +252,7 @@ def botInformeConver():
     c.drawString(50, 25, 'La palabra ' + str(palrep) + ' se repite ' + str(numrep) + ' veces.')
     c.save()
     print("El PDF ha sido creado \n")
+
 
 preguntas_respuestas = {"¿Que equipo de futbol juega hoy?": "Hoy juega el Betis",
                         "¿Cuando es la próxima carrera de formula 1?": "28-29 de marzo en Sakhir.",
